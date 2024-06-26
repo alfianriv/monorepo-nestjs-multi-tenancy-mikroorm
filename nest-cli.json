@@ -36,6 +36,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
+    },
+    "multi-tenancy": {
+      "type": "library",
+      "root": "libs/multi-tenancy",
+      "entryFile": "index",
+      "sourceRoot": "libs/multi-tenancy/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/multi-tenancy/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -4,14 +4,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { uid } from 'uid/secure';
 import { PostgreSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
-import { databaseBuilder } from '../../config/database.config';
-import { MultiSchemaService } from '../../config';
+import { MultiSchemaService } from '@app/multi-tenancy';
+import { DatabaseConfig } from '../../configs/database/database.config';
 
 @Injectable()
 export class UsersService extends MultiSchemaService {
   constructor() {
     super();
-    this.setConfig(databaseBuilder());
+    this.setConfig(DatabaseConfig);
   }
 
   async create(data: CreateUserDto) {

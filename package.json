@@ -82,7 +82,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1"
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
+      "^@app/multi-tenancy(|/.*)$": "<rootDir>/libs/multi-tenancy/src/$1"
     }
   },
   "main": ".eslintrc.js",
