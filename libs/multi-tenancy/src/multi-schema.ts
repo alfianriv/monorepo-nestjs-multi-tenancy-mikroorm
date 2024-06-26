@@ -1,11 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { PostgreSqlDriver, SqlEntityManager } from "@mikro-orm/postgresql";
-import { DatabaseConfigBuilder } from "./database-builder";
-import { DatabaseConfigBuilderInterface } from "./definitions";
+import { Injectable } from '@nestjs/common';
+import {
+  Options,
+  PostgreSqlDriver,
+  SqlEntityManager,
+} from '@mikro-orm/postgresql';
+import { DatabaseConfigBuilder } from './database-builder';
 
 @Injectable()
 export class MultiSchemaService {
-  private config: DatabaseConfigBuilderInterface;
+  private config: Options;
 
   async getRepository(options: {
     schema?: string;
@@ -22,7 +25,7 @@ export class MultiSchemaService {
 
   async getEm(schema?: string) {
     const conn = await this.getConn();
-    return conn.em.fork({ schema: schema || "public" });
+    return conn.em.fork({ schema: schema || 'public' });
   }
 
   async getConn() {
@@ -40,11 +43,10 @@ export class MultiSchemaService {
     }
   }
 
-  async migrate(path: string) {
+  async migrate() {
     this.checkConfig();
     const conn = await DatabaseConfigBuilder({
       ...this.config,
-      migrationPath: path,
     });
     const db = conn;
     try {
@@ -58,7 +60,7 @@ export class MultiSchemaService {
     }
   }
 
-  setConfig(config: DatabaseConfigBuilderInterface) {
+  setConfig(config: Options) {
     this.config = config;
   }
 

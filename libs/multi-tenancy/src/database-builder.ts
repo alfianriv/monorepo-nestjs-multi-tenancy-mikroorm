@@ -1,9 +1,8 @@
 import { Migrator } from '@mikro-orm/migrations';
 import { MikroORM, Options } from '@mikro-orm/postgresql';
-import { DatabaseConfigBuilderInterface } from './definitions';
 
 export const DatabaseConfigBuilder = async (
-  config: DatabaseConfigBuilderInterface,
+  config: Options,
 ) => {
   const options: Options = {
     host: config.host,
@@ -15,12 +14,6 @@ export const DatabaseConfigBuilder = async (
     entities: config.entities,
   };
 
-  if (config.migrationPath) {
-    options.migrations = {
-      path: config.migrationPath,
-    };
-    options.extensions = [Migrator];
-  }
   const conn = await MikroORM.init({
     ...options,
   });
