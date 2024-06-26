@@ -1,73 +1,122 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Monorepo Microservices with Multi-Tenancy (Multi-Schema) on PostgreSQL
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This repository contains a collection of microservices designed to work together to provide a robust, scalable multi-tenancy solution using PostgreSQL multi-schema architecture. Each tenant has its own schema within the same database, ensuring data isolation while sharing the same database instance.
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Microservices Architecture**: Independent services that communicate via APIs.
+- **Multi-Tenancy**: Each tenant's data is stored in a separate schema within the same PostgreSQL database.
+- **Scalability**: Easily add new tenants and services without major changes to the system.
+- **Data Isolation**: Ensure tenant data is isolated and secure.
 
-## Installation
+## Prerequisites
 
-```bash
-$ npm install
+- **PostgreSQL**: The primary database system used for storing tenant data.
+- **Node.js**: Depending on the microservices' language.
+
+## Directory Structure
+
+```plaintext
+root
+│
+├── apps
+│   ├── service1
+│   │   ├── src
+│   │   ├── ...
+│   ├── service2
+│   │   ├── src
+│   │   ├── ...
+│   └── ...
+│
+├── libs
+│   ├── multi-tenancy
+|   |   ├── src
+|   |   └── ...
+│   └── ...
+│
+├── README.md
+└── ...
 ```
 
-## Running the app
+## Getting Started
 
-```bash
-# development
-$ npm run start
+### Setup
 
-# watch mode
-$ npm run start:dev
+1. **Clone the Repository**
 
-# production mode
-$ npm run start:prod
+    ```sh
+    git clone https://github.com/alfianriv/monorepo-nestjs-multi-tenancy-mikroorm/tree/develop
+    cd monorepo-nestjs-multi-tenancy-mikroorm
+    ```
+
+2. **Build and Start the Services**
+
+    ```sh
+    npm run start:dev `service_name`
+    ```
+
+3. **Initialize the Database**
+
+    Migrate database using migration script 
+
+    ```sh
+    npm run migrate
+    ```
+
+### Environment Variables
+
+Each service requires specific environment variables. These can be set in a `.env` file in the root directory.
+
+## Usage
+
+### Adding a New Tenant
+
+1. **Create a New Schema**
+
+    Hit api in identity to create new users
+
+    ```
+    [POST] curl http://localhost:3000/users
+    ```
+
+2. **Initialize the Schema**
+
+    Hit api to resync schema in all users
+
+    ```
+    [GET] curl http://localhost:3000/users/migrate
+    ```
+
+### Running the Services
+
+Each service can be managed individually. For example, to start `identity`:
+
+```sh
+npm run start:dev identity
 ```
 
-## Test
+## Testing
 
-```bash
-# unit tests
-$ npm run test
+Each service includes unit and integration tests. To run the tests:
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```sh
+npm run test 
 ```
 
-## Support
+## Contributing
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any inquiries or support, please contact [alfian.rivaldi8@gmail.com](mailto:alfian.rivaldi8@gmail.com).
+
+---
+
+This README provides a comprehensive guide to setting up and managing a monorepo for microservices with multi-tenancy on PostgreSQL using a multi-schema approach.
