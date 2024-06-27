@@ -50,6 +50,7 @@ export class UsersService extends MultiSchemaService<UserEntity> {
       Object.assign(user, data);
       em.flush();
       em.commit();
+      return user;
     } catch (error) {
       em.rollback();
       throw error;
@@ -62,7 +63,7 @@ export class UsersService extends MultiSchemaService<UserEntity> {
     try {
       const user = await this.findOne(id, { em });
       em.remove(user);
-      em.commit();
+      em.flush();
     } catch (error) {
       em.rollback();
       throw error;

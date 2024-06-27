@@ -1,1 +1,3 @@
-export class CreateItemDto {}
+export class CreateItemDto {
+  name!: string;
+}
