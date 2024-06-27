@@ -7,7 +7,7 @@ import {
 import { DatabaseConfigBuilder } from './database-builder';
 import { DatabaseConfigSequelize } from 'apps/inventory/src/configs/database/database.config';
 import { SequelizeStorage, Umzug } from 'umzug';
-import { QueryInterface, Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import 'ts-node/register';
 @Injectable()
 export class MultiSchemaService<T extends object> {
