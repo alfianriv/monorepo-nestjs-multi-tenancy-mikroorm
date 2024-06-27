@@ -83,7 +83,7 @@ Each service requires specific environment variables. These can be set in a `.en
 
 2. **Initialize the Schema**
 
-    Hit api to resync schema in all users
+    Hit api to resync schema to db in all users
 
     ```
     [GET] curl http://localhost:3000/users/migrate

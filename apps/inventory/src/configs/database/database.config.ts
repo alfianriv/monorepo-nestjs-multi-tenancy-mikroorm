@@ -1,5 +1,9 @@
 import { configDotenv } from 'dotenv';
-import { Options, PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  EntityCaseNamingStrategy,
+  Options,
+  PostgreSqlDriver,
+} from '@mikro-orm/postgresql';
 import { Migrator } from '@mikro-orm/migrations';
 import { InventoryEntities } from '../../commons/entities';
 import { Options as SequelizedOptions } from 'sequelize';
@@ -20,6 +24,7 @@ export const DatabaseConfig: Options = {
     snapshotName: 'inventory',
   },
   extensions: [Migrator],
+  namingStrategy: EntityCaseNamingStrategy,
 };
 
 export const DatabaseConfigSequelize: SequelizedOptions = {

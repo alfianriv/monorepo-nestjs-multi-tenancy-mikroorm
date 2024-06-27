@@ -36,6 +36,7 @@
     "dotenv": "^16.4.5",
     "glob": "^10.4.2",
     "lodash": "^4.17.21",
+    "mikro-orm-soft-delete": "^1.0.0-alpha.1",
     "reflect-metadata": "^0.2.0",
     "rimraf": "^5.0.7",
     "rxjs": "^7.8.1",

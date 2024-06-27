@@ -1,5 +1,9 @@
 import { configDotenv } from 'dotenv';
-import { Options, PostgreSqlDriver } from '@mikro-orm/postgresql';
+import {
+  EntityCaseNamingStrategy,
+  Options,
+  PostgreSqlDriver,
+} from '@mikro-orm/postgresql';
 import { Migrator } from '@mikro-orm/migrations';
 import { IdentityEntities } from '../../commons/entities';
 configDotenv();
@@ -19,4 +23,5 @@ export const DatabaseConfig: Options = {
     snapshotName: 'identity',
   },
   extensions: [Migrator],
+  namingStrategy: EntityCaseNamingStrategy,
 };
