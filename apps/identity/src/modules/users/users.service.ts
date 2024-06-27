@@ -6,9 +6,10 @@ import { uid } from 'uid/secure';
 import { PostgreSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
 import { MultiSchemaService } from '@app/multi-tenancy';
 import { DatabaseConfig } from '../../configs/database/database.config';
+import axios from 'axios';
 
 @Injectable()
-export class UsersService extends MultiSchemaService {
+export class UsersService extends MultiSchemaService<UserEntity> {
   constructor() {
     super();
     this.setConfig(DatabaseConfig);
@@ -66,5 +67,21 @@ export class UsersService extends MultiSchemaService {
       em.rollback();
       throw error;
     }
+  }
+
+  async migrateServices() {
+    const users = await this.findAll();
+
+    for (const user of users) {
+      await Promise.all([
+        axios.get(
+          `${process.env.INVENTORY_URL}/db/migrate/${user.id}_inventory`,
+        ),
+      ]);
+    }
+
+    return {
+      ok: true,
+    };
   }
 }

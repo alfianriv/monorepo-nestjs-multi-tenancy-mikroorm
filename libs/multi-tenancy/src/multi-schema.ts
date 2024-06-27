@@ -5,9 +5,12 @@ import {
   SqlEntityManager,
 } from '@mikro-orm/postgresql';
 import { DatabaseConfigBuilder } from './database-builder';
-
+import { DatabaseConfigSequelize } from 'apps/inventory/src/configs/database/database.config';
+import { SequelizeStorage, Umzug } from 'umzug';
+import { QueryInterface, Sequelize } from 'sequelize';
+import 'ts-node/register';
 @Injectable()
-export class MultiSchemaService {
+export class MultiSchemaService<T extends object> {
   private config: Options;
 
   async getRepository(options: {
@@ -17,10 +20,10 @@ export class MultiSchemaService {
   }) {
     let em: SqlEntityManager<PostgreSqlDriver>;
     if (options?.em) {
-      return options.em.getRepository(options.entityName);
+      return options.em.getRepository<T>(options.entityName);
     }
     em = await this.getEm(options?.schema);
-    return em.getRepository(options.entityName);
+    return em.getRepository<T>(options.entityName);
   }
 
   async getEm(schema?: string) {
@@ -43,14 +46,29 @@ export class MultiSchemaService {
     }
   }
 
-  async migrate() {
+  async migrate(schema: string) {
     this.checkConfig();
     const conn = await DatabaseConfigBuilder({
       ...this.config,
+      migrations: {
+        path: '../blank',
+      },
+      schema,
     });
     const db = conn;
     try {
-      db.migrator.up();
+      const migrator = db.getMigrator();
+      await migrator.up({});
+      const sequelize = new Sequelize({ ...DatabaseConfigSequelize, schema });
+      const umzug = new Umzug({
+        migrations: {
+          glob: './apps/inventory/migrations/*.ts',
+        },
+        storage: new SequelizeStorage({ sequelize, schema }),
+        logger: console,
+        context: { queryInterface: sequelize.getQueryInterface(), schema },
+      });
+      await umzug.runAsCLI(['up']);
     } catch (error) {
       throw error;
     } finally {

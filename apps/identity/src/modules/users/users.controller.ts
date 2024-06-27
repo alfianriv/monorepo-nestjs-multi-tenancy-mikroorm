@@ -25,6 +25,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('migrate')
+  migrate() {
+    return this.usersService.migrateServices();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
