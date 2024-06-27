@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { databaseBuilder } from './config/database.config';
-import { MultiSchemaService } from 'mikroorm-multi-schema';
+import { DatabaseConfig } from './configs/database/database.config';
+import { MultiSchemaService } from '@app/multi-tenancy';
+import { UserEntity } from './modules/users/entities/user.entity';
 
 @Injectable()
-export class AppService extends MultiSchemaService {
+export class AppService extends MultiSchemaService<UserEntity> {
   constructor() {
     super();
-    this.setConfig(databaseBuilder());
+    this.setConfig(DatabaseConfig);
   }
   getHealth() {
     return {

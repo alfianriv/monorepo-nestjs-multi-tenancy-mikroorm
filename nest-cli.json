@@ -28,13 +28,13 @@
         "tsConfigPath": "apps/inventory/tsconfig.app.json"
       }
     },
-    "database": {
+    "multi-tenancy": {
       "type": "library",
-      "root": "libs/database",
+      "root": "libs/multi-tenancy",
       "entryFile": "index",
-      "sourceRoot": "libs/database/src",
+      "sourceRoot": "libs/multi-tenancy/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/database/tsconfig.lib.json"
+        "tsConfigPath": "libs/multi-tenancy/tsconfig.lib.json"
       }
     }
   }

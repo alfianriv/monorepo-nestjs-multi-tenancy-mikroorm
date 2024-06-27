@@ -4,14 +4,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { uid } from 'uid/secure';
 import { PostgreSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
-import { databaseBuilder } from '../../config/database.config';
-import { MultiSchemaService } from '../../config';
+import { MultiSchemaService } from '@app/multi-tenancy';
+import { DatabaseConfig } from '../../configs/database/database.config';
+import axios from 'axios';
 
 @Injectable()
-export class UsersService extends MultiSchemaService {
+export class UsersService extends MultiSchemaService<UserEntity> {
   constructor() {
     super();
-    this.setConfig(databaseBuilder());
+    this.setConfig(DatabaseConfig);
   }
 
   async create(data: CreateUserDto) {
@@ -49,6 +50,7 @@ export class UsersService extends MultiSchemaService {
       Object.assign(user, data);
       em.flush();
       em.commit();
+      return user;
     } catch (error) {
       em.rollback();
       throw error;
@@ -61,10 +63,26 @@ export class UsersService extends MultiSchemaService {
     try {
       const user = await this.findOne(id, { em });
       em.remove(user);
-      em.commit();
+      em.flush();
     } catch (error) {
       em.rollback();
       throw error;
     }
+  }
+
+  async migrateServices() {
+    const users = await this.findAll();
+
+    for (const user of users) {
+      await Promise.all([
+        axios.get(
+          `${process.env.INVENTORY_URL}/db/migrate/${user.id}_inventory`,
+        ),
+      ]);
+    }
+
+    return {
+      ok: true,
+    };
   }
 }
